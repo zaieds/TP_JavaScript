@@ -1,0 +1,29 @@
+body {
+ background-image: url("image-fond.jpg");
+ background-repeat: no-repeat;
+ background-attachment: fixed;
+ background-size: 100%;
+}
+
+table img {
+  height: 200px;
+}
+table td {
+  text-align:  center;
+}
+table {
+  background-color: #ffffff;
+  opacity: 0.9;
+  margin: auto;
+}
+table, th, tr, td {
+  border: 1px solid Lavender  ;
+}
+h1 {
+  margin-top: 0px;
+  padding: 0.5em;
+  text-align: center;
+  background-color: IndianRed ;
+  opacity: 0.7;
+  color: white;
+}
