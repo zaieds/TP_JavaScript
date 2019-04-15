@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+	<html>
+<head>
+<title>Page Title</title>
+ <meta charset="UTF-8">
+ <style type="text/css">
+  #playground{border: 1px solid black;
+    height: 600px;
+    width: 800px;
+    background: url("desert_sand.jpg");
+    position: absolute;
+
+
+}
+    img {
+    position: absolute;
+    top: 0px;
+    left:0px;
+ 
+    }
+    </style>
+</head>
+
+<body>
+
+<div id="playground">
+      
+       
+        </div>
+<script type="text/javascript">
+
+ piste = document.getElementById("playground"); 
+
+longueur = window.getComputedStyle(piste, null).getPropertyValue("width");
+
+  largeur = window.getComputedStyle(piste, null).getPropertyValue("height");
+
+function Position(x=0,y=0) {
+
+
+   if(this!=window){
+
+    this.x=x; 
+    this.y=y; 
+   }else{
+
+    return new Position(x,y); 
+   }
+  
+ Position.prototype.add = function(pos=Position()) { 
+
+  this.x=this.x+pos.x; 
+  this.y=this.y+pos.y; 
+ }
+
+
+
+}
+ function Sprite(imgPath="",insideDOM=window.document.getElementById("playground")){
+
+
+  if(imgPath!=""){
+
+if(this!=window){
+
+   this.image = document.createElement("img"); 
+
+   this.image.setAttribute("src", imgPath );
+   c=this.image
+   this.longueur=window.getComputedStyle(c, null).getPropertyValue("width"); 
+   this.largeur=window.getComputedStyle(c, null).getPropertyValue("height"); 
+   console.log(window.getComputedStyle); 
+
+   insideDOM.appendChild(this.image); 
+   this.pos=Position();
+   this.speedY=0
+   this.speedX=0 }
+   else{
+
+    return new Sprite(imgPath,insideDOM); 
+
+   }
+
+       }else{
+    console.log("spécifiez le chemin de l'image"); 
+   }
+
+ }
+
+
+function setTimeoutMeth(obj, Meth, param){
+
+
+
+    setTimeoutout(function(){meth.call(obj,param)}, delay); 
+}
+
+
+
+Sprite.prototype.moveTo = function(pos=Position(0,0)){
+
+if(pos.x<=(parseInt(longueur)-50) && pos.x>=0){
+        
+     this.image.style.left = pos.x.toString()+'px';
+           
+        
+    }
+
+    if(pos.y<=(parseInt(largeur)-50) && pos.y>=0){
+       
+        this.image.style.top =pos.y.toString()+'px';
+
+    }
+
+}
+
+ Sprite.prototype.moveRel = function(pos=Position()){
+
+   this.pos.add(pos); 
+  
+   this.moveTo(this.pos);
+ }
+
+ Sprite.prototype.moveFrame = function(duration){
+
+
+   this.moveRel(Position(this.speedX*(duration/1000),this.speedY*(duration/1000)));
+ }
+
+ function Robot(imgPath="R2D2.png",insideDOM=window.document.getElementById("playground")){
+                Sprite.call(this,imgPath,insideDOM);
+            }
+
+
+
+    Robot.prototype=new Sprite();
+   Robot.prototype.constructor=Sprite;
+
+  game= {
+
+    arrowLeft:false,
+    arrowRight:false,
+    arrowUp:false,
+    arrowDown:false,
+    robot:new Robot(),
+    run : true,  
+    tFrameLast : 0,
+
+  }  ;         
+
+ window.onkeydown = function(e) {
+                if(e.key==="ArrowLeft"){
+                    game.arrowLeft=true;
+                }
+                else if (e.key==="ArrowDown"){
+                    game.arrowDown=true;
+                }
+                else if (e.key==="ArrowRight"){
+                    game.arrowRight=true;
+                }
+                else if (e.key==="ArrowUp"){
+                    game.arrowUp=true;
+                }
+                else if(e.key="s"){
+                    game.run=false;
+                }
+                console.log("enfoncement"); 
+            }
+
+
+window.onkeyup = function(e) {
+
+                if(e.key==="ArrowLeft"){
+                    console.log("ArrowLeft"); 
+                    game.arrowLeft=false;
+                }
+                else if (e.key==="ArrowDown"){
+                    game.arrowDown=false;
+                }
+                else if (e.key==="ArrowRight"){
+                    game.arrowRight=false;
+                }
+                else if (e.key==="ArrowUp"){
+                    game.arrowUp=false;
+                }
+                
+                console.log("relachement"); 
+            }
+i=0; 
+
+game.update = function (tFrame){
+  this.robot.speedY=20
+  this.robot.speedX=15
+  pas =100; 
+
+  if(this.arrowUp){
+ console.log(" tFrame arrowUp = "+tFrame); 
+    this.robot.speedY=-pas; 
+    this.robot.speedX=0; 
+
+  } 
+  if(this.arrowDown){
+  	 console.log(" tFrame arrowDown = "+tFrame); 
+      this.robot.speedY= pas; 
+    this.robot.speedX=0; 
+ 
+  }
+ if(this.arrowRight){
+ 	 console.log(" tFrame arrowRight = "+tFrame); 
+    this.robot.speedX= pas; 
+    this.robot.speedY=0; 
+    
+ }
+
+ if(this.arrowLeft){
+ 	 console.log(" tFrame arrowLeft = "+tFrame); 
+    this.robot.speedX=- pas; 
+    this.robot.speedY=0; 
+    
+ }
+
+this.robot.moveFrame(tFrame-this.tFrameLast);
+ this.tFrameLast=tFrame; 
+}
+
+
+
+
+
+
+;(function () {
+          function main(tFrame) {
+            game.stopMain = window.requestAnimationFrame( main );
+            if (! game.run) {
+              window.cancelAnimationFrame( game.stopMain );
+              console.log("Game over");
+            } else {
+              game.update(tFrame);
+            }
+          }
+          main(0); // Début du cycle
+        })();
+
+
+
+
+
+
+</script>
+
+</body>
+</html> 
