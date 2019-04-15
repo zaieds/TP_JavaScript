@@ -1,0 +1,41 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="fr">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="generator" content="PSPad editor, www.pspad.com">
+<title>Ball Bounces</title>
+<style type="text/css">
+body {margin:0;padding:0;background-color:#000000;}
+img {display:block;margin:0;border:0;width:13px;height:13px;position:absolute;top:30px;left:30px;}
+</style>
+</head>
+<body>
+<img id="bal" src="E:\annee scolaire 2019\2eme semestre\cours developpement web coté client\TP\TP2\balle.gif">
+
+<script type="text/javascript">
+var oy=ox=30,ny=ov=nv=oc=nc=nx=0,ky=0.60,kv=0.0002,dx=0.3+Math.random()*2;
+
+function ballMove(){
+// Calcul des nouvelles coordonnées nx,nv en fonction des anciennes ox,oy
+	if (nv) s=nv/Math.abs(nv);else s=1;// sign of the velocity
+	na=ky-s*kv*ov*ov; // forces (or accelerations) gravity + air resistance (only on oy)
+	nv=ov+na; // new velocity = oldvelocity + dna (delta t = 1)
+	ny=oy+nv; // new distance Oy
+	nx=ox+dx; // new distance ox (constante velocity) 
+	if (500<ny) {ny=1000-ny;nv=-nv*0.95;dx=0.97*dx}  // bounce
+	if (Math.abs(nv)<0.01 && dx<0.1) return;
+// les anciennes reprennent les nouvelles
+	oy=ny;ov=nv;oc=nv;ox=nx;
+
+// Placement de l'image
+	document.getElementById('bal').style.top=Math.round(ny)+'px';
+	document.getElementById('bal').style.left=Math.round(nx)+'px';
+
+// On recommence
+	setTimeout(ballMove,15); 
+}	
+ballMove();
+
+</script>
+</body>
+</html>
